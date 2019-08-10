@@ -1,0 +1,33 @@
+{
+  "name": "edforce",
+  "version": "1.0.0",
+  "description": "web app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanielOrDany/edforce.git"
+  },
+  "keywords": [
+    "edforce"
+  ],
+  "author": "Daniel Nikulshyn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanielOrDany/edforce/issues"
+  },
+  "homepage": "https://github.com/DanielOrDany/edforce#readme",
+  "devDependencies": {
+    "concurrently": "^4.1.1",
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "body": "^5.1.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "parser": "^0.1.4",
+    "pg": "^7.12.1"
+  }
+}
