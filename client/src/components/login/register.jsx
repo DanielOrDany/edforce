@@ -1,8 +1,20 @@
 import React from "react";
 import loginImg from "../../login.svg";
 import axios from 'axios';
+// const {Pool, Client} = require('pg');
+// const client = new Client({
+//   user: "zsztnpbvuacctg",
+//   password: "487c7abe7ab689f7d4c38692c25eb7eb0475f4a0a6f7c316308fcc922b948d30",
+//   host: "ec2-54-217-234-157.eu-west-1.compute.amazonaws.com",
+//   port: "5432",
+//   database: "dfuvh4cick4ngf",
+//   ssl: true
+// })
+
+// const db = require('./db_index.js')
 
 export class Register extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -12,6 +24,9 @@ export class Register extends React.Component {
       start_date: "Today"
     }
     this.handleChange = this.handleChange.bind(this);
+    this.checkRegistrationData = this.checkRegistrationData.bind(this);
+    this.check_email = this.check_email.bind(this);
+    this.check_pass = this.check_pass.bind(this);
     this.createNewUser = this.createNewUser.bind(this);
   }
 
@@ -25,8 +40,99 @@ export class Register extends React.Component {
     });
   }
 
+  check_email(mail){
+    var mail_regex = /@.*\..+/;
+    var mail_exist_regex = /[^@].*\..+/;
+    var existing_mails = ['gmail.com', 'yahoo.com'];
+    if(mail_regex.test(mail)){
+        var is_good = false;
+        var matcher = mail_regex.exec(mail);
+        var current_mail = mail_exist_regex.exec(matcher[0]);
+        for(var x = 0; x < existing_mails.length; x++){
+            if(current_mail[0] == existing_mails[x]){
+                is_good = !is_good;
+                break;
+            }
+        }
+        if(is_good){
+            console.log('Your email is good');
+            return true;
+        }
+        else{
+            console.log('Something is wrong with your mail');
+            return false;
+        }
+    }
+    else{
+        console.log('Your email is wrong');
+        return false;
+    }
+  }
+
+  check_pass(pass){
+    var pass_regex_0 = /\w{8,}/;
+    var pass_regex_1 = /[a-z]+/;
+    var pass_regex_2 = /[A-Z]+/;
+    var pass_regex_3 = /[0-9]+/;
+  
+    var good_lenght = false;
+    var has_small_letters = false;
+    var has_big_letters = false;
+    var has_numbers = false;
+    
+    if(pass_regex_0.test(pass)){
+        good_lenght = !good_lenght
+        if(pass_regex_1.test(pass)){
+            has_small_letters = !has_small_letters;
+        }
+  
+        if(pass_regex_2.test(pass)){
+            has_big_letters = !has_big_letters;
+        }
+  
+        if(pass_regex_3.test(pass)){
+            has_numbers = !has_numbers;
+        }
+    }
+  
+    if(good_lenght){
+        if(has_small_letters && has_big_letters && has_numbers){
+            console.log('Good password');
+            return true;
+        }
+        else{
+            if(!has_small_letters){
+                console.log('Password must have at least 1 small letter');
+            }
+            if(!has_big_letters){
+                console.log('Password must have at least 1 big letter');
+            }
+            if(!has_numbers){
+                console.log('Password must have at least 1 number');
+            }
+            return false;
+        }
+    }
+    else{
+        console.log('Password is too short');
+        return false;
+    }
+  }
+
+  checkRegistrationData(event) {
+    var isMailGood = this.check_email(this.state.email);
+    var isPassGood = this.check_pass(this.state.password);
+    if(isMailGood && isPassGood) {
+      this.createNewUser(event);
+    }
+    else{
+      console.log('Something went wrong.\nPlease check text higher.')
+    }
+  }
+
   createNewUser(event) {
     console.log(this.state.username + " " + this.state.email + " " + this.state.password);
+    // db.insert_user(this.state.username, this.state.email, this.state.password);
     event.preventDefault();
     axios.post('http://localhost:5000/api/owners/', this.state)
     .then(response => {
@@ -61,7 +167,7 @@ export class Register extends React.Component {
           </div>
         </div>
         <div className="footer">
-          <button type="button" className="btn" onClick={this.createNewUser}>
+          <button type="button" className="btn" onClick={this.checkRegistrationData}>
             Register
           </button>
         </div>
