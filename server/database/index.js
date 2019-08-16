@@ -34,6 +34,10 @@ class Database {
     
     }
 
+    insert_user(username, email, password) {
+      this.query("INSERT INTO owners (username, email, password) VALUES ('$1', '$2', '$3')", [username, email, password]);
+    }
+
     end () {
         this._pool.end();
 

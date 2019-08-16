@@ -1,17 +1,6 @@
 import React from "react";
 import loginImg from "../../login.svg";
 import axios from 'axios';
-// const {Pool, Client} = require('pg');
-// const client = new Client({
-//   user: "zsztnpbvuacctg",
-//   password: "487c7abe7ab689f7d4c38692c25eb7eb0475f4a0a6f7c316308fcc922b948d30",
-//   host: "ec2-54-217-234-157.eu-west-1.compute.amazonaws.com",
-//   port: "5432",
-//   database: "dfuvh4cick4ngf",
-//   ssl: true
-// })
-
-// const db = require('./db_index.js')
 
 export class Register extends React.Component {
 
@@ -122,25 +111,46 @@ export class Register extends React.Component {
   checkRegistrationData(event) {
     var isMailGood = this.check_email(this.state.email);
     var isPassGood = this.check_pass(this.state.password);
+    event.preventDefault();
     if(isMailGood && isPassGood) {
-      this.createNewUser(event);
+      this.createNewUser();
     }
     else{
       console.log('Something went wrong.\nPlease check text higher.')
     }
   }
 
-  createNewUser(event) {
+  addUser(usernameIn, emailIn, passwordIn) {
+    let data = {
+      username: usernameIn,
+      email: emailIn,
+      password: passwordIn
+    }
+    var request = new Request('http://localhost:5000/api/new-user', {
+      method: 'POST',
+      headers: new Headers({ 'Content-Type': 'application/json'}),
+      body: JSON.stringify(data)
+    });
+
+    fetch(request)
+    .then((response) => {
+      response.json
+      .then((data) => {
+        console.log(data);
+      })
+    })
+  }
+
+  createNewUser() {
     console.log(this.state.username + " " + this.state.email + " " + this.state.password);
-    // db.insert_user(this.state.username, this.state.email, this.state.password);
-    event.preventDefault();
-    axios.post('http://localhost:5000/api/owners/', this.state)
-    .then(response => {
-      console.log(response);
-    })
-    .catch(error =>{
-      console.log(error);
-    })
+    this.addUser(this.state.username, this.state.email, this.state.password);
+    // axios.post('http://localhost:5000/api/owners/', this.state)
+    // .then(response => {
+    //   console.log(response);
+    // })
+    // .catch(error =>{
+    //   console.log(error);
+    // })
   }
 
   render() {
