@@ -38,7 +38,7 @@ let pool = new pg.Pool({
     database: 'dfuvh4cick4ngf',
     host: 'ec2-54-217-234-157.eu-west-1.compute.amazonaws.com',
     port: 5432,
-    max: 10,
+    max: 20,
     ssl: true
 })
 
@@ -62,19 +62,19 @@ app.post('/api/new-user', function(request, response){
     let values = [username, email, password];
     pool.connect((err, db, done)=>{
         if(err){
-            return console.log(err);
+            return response.status(400).send(err);
         }
         else{
             db.query('INSERT INTO owners (username, email, password) VALUES ($1, $2, $3)', [...values], (err, table)=>{
                 done();
                 if(err){
-                    return console.log(err);
+                    return response.status(400).send(err);
                 }
                 else{
                     console.log('INSERTED');
-                    db.end();
+                    response.status(201).send({message: 'Data inserted'});
                 }
-            })
+            });
         }
     })
 })

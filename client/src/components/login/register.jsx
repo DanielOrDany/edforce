@@ -136,9 +136,12 @@ export class Register extends React.Component {
     .then((response) => {
       response.json
       .then((data) => {
-        console.log(data);
+        let username = this.state.username;
+        username.concat(data);
+        console.log(username);
       })
     })
+    .catch(err => console.log)
   }
 
   createNewUser() {
