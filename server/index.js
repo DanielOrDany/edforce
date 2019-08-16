@@ -55,6 +55,27 @@ app.use(function(request, response, next) {
     next();
 });
 
+app.post('/api/find-user', (request, response)=>{
+    var username = request.body.username;
+
+    pool.connect(function(err, db, done){
+        if(err){
+            return response.status(400).send(err);
+        }
+        else{
+            db.query('SELECT * FROM owners WHERE username=$1', [username], function(err, table) {
+                done();
+                if(err) {
+                    return response.status(400).send(err);
+                }
+                else {
+                    return response.status(200).send(table.rows);
+                }
+            })
+        }
+    })
+})
+
 app.post('/api/new-user', function(request, response){
     var username = request.body.username;
     var email = request.body.email;
